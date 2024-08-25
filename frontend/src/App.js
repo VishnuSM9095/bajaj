@@ -8,23 +8,35 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = inputValue.split(",");
+    const data = inputValue.split(",").map(item => item.trim()); // Trim whitespace around items
 
-    const response = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data }),
-    });
+    try {
+      const res = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data }),
+      });
 
-    const result = await response.json();
-    setResponse(result);
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await res.json();
+      setResponse(result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setResponse({
+        is_success: false,
+        message: "Error fetching data"
+      });
+    }
   };
 
   const getFilteredResponse = () => {
-    if (!response) return null;
-    
+    if (!response || !response.is_success) return "No data or error occurred";
+
     switch (filter) {
       case "Alphabets":
         return response.alphabets.join(", ");
@@ -33,7 +45,7 @@ function App() {
       case "Highest Lowercase Alphabet":
         return response.highest_lowercase_alphabet.join(", ");
       default:
-        return null;
+        return "Select a filter to see results";
     }
   };
 
