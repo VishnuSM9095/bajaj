@@ -5,6 +5,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
+// POST endpoint to process input data
 app.post('/bfhl', (req, res) => {
     const { data } = req.body;
 
@@ -23,11 +24,10 @@ app.post('/bfhl', (req, res) => {
     let highestLowerCase = null;
 
     data.forEach(item => {
-        // Check if the item can be converted to a number
         const parsedNumber = parseFloat(item);
         if (!isNaN(parsedNumber)) {
             numbers.push(item);
-        } else if (/[a-zA-Z]/.test(item)) {
+        } else if (/^[a-zA-Z]$/.test(item)) {
             alphabets.push(item);
             if (item === item.toLowerCase() && (!highestLowerCase || item > highestLowerCase)) {
                 highestLowerCase = item;
@@ -46,6 +46,7 @@ app.post('/bfhl', (req, res) => {
     });
 });
 
+// GET endpoint to return a static response
 app.get('/bfhl', (req, res) => {
     res.json({ operation_code: 1 });
 });
