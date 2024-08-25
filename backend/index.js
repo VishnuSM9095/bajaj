@@ -23,7 +23,7 @@ app.post('/bfhl', (req, res) => {
     let highestLowerCase = null;
 
     data.forEach(item => {
-        if (!isNaN(item)) {
+        if (!isNaN(item) || !isNaN(Number(item))) {
             numbers.push(item);
         } else if (/[a-zA-Z]/.test(item)) {
             alphabets.push(item);
