@@ -46,5 +46,5 @@ app.get('/bfhl', (req, res) => {
     res.json({ operation_code: 1 });
 });
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
