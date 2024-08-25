@@ -8,9 +8,9 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = inputValue.split(",").map(item => item.trim()); // Ensure trimming of spaces
+    const data = inputValue.split(",").map(item => item.trim()); // Trim whitespace
 
-    const res = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
+    const response = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,13 +18,14 @@ function App() {
       body: JSON.stringify({ data }),
     });
 
-    const result = await res.json();
+    const result = await response.json();
     setResponse(result);
+    setFilter(""); // Reset filter when new data is submitted
   };
 
   const getFilteredResponse = () => {
-    if (!response || !response.is_success) return "No data or error occurred";
-
+    if (!response) return null;
+    
     switch (filter) {
       case "Alphabets":
         return response.alphabets.join(", ");
@@ -33,7 +34,7 @@ function App() {
       case "Highest Lowercase Alphabet":
         return response.highest_lowercase_alphabet.join(", ");
       default:
-        return "Select a filter to see results";
+        return null;
     }
   };
 
