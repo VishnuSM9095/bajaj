@@ -23,10 +23,10 @@ app.post('/bfhl', (req, res) => {
     let highestLowerCase = null;
 
     data.forEach(item => {
-        // Check if item is a string that can be converted to a number
-        const number = Number(item);
-        if (!isNaN(number) && item.trim() !== '') {
-            numbers.push(item); // Add item as string
+        // Check if the item can be converted to a number
+        const parsedNumber = parseFloat(item);
+        if (!isNaN(parsedNumber)) {
+            numbers.push(item);
         } else if (/[a-zA-Z]/.test(item)) {
             alphabets.push(item);
             if (item === item.toLowerCase() && (!highestLowerCase || item > highestLowerCase)) {
