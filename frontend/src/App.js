@@ -9,7 +9,7 @@ function App() {
     e.preventDefault();
     const data = inputValue.split(",");
 
-    const response = await fetch("http://localhost:3000/bfhl", {
+    const response = await fetch("https://bajaj-k35f.onrender.com/bfhl/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
