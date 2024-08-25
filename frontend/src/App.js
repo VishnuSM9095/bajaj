@@ -8,33 +8,48 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = inputValue.split(",").map(item => item.trim()); // Trim whitespace
+    const data = inputValue.split(",").map(item => item.trim()); // Ensure trimming of spaces
 
-    const response = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data }),
-    });
+    try {
+      const res = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data }),
+      });
 
-    const result = await response.json();
-    setResponse(result);
-    setFilter(""); // Reset filter when new data is submitted
+      if (!res.ok) {
+        throw new Error("Network response was not ok.");
+      }
+
+      const result = await res.json();
+      setResponse(result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setResponse({
+        is_success: false,
+        message: "An error occurred. Please try again.",
+      });
+    }
   };
 
   const getFilteredResponse = () => {
-    if (!response) return null;
-    
+    if (!response) return "No data or error occurred";
+
+    if (!response.is_success) return response.message || "Error in response";
+
     switch (filter) {
       case "Alphabets":
-        return response.alphabets.join(", ");
+        return response.alphabets.length > 0 ? response.alphabets.join(", ") : "No alphabets found";
       case "Numbers":
-        return response.numbers.join(", ");
+        return response.numbers.length > 0 ? response.numbers.join(", ") : "No numbers found";
       case "Highest Lowercase Alphabet":
-        return response.highest_lowercase_alphabet.join(", ");
+        return response.highest_lowercase_alphabet.length > 0 
+          ? response.highest_lowercase_alphabet.join(", ") 
+          : "No lowercase alphabet found";
       default:
-        return null;
+        return "Select a filter to see results";
     }
   };
 
