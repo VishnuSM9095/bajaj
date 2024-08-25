@@ -4,19 +4,26 @@ import './App.css';
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [response, setResponse] = useState(null);
-  const [filter, setFilter] = useState(""); // State for filter selection
+  const [filter, setFilter] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = inputValue.split(",").map(item => item.trim()); // Ensure trimming of spaces
-
+    setError("");
+    
     try {
+      const parsedData = JSON.parse(inputValue);
+      if (!parsedData.data || !Array.isArray(parsedData.data)) {
+        setError("Invalid JSON structure. Please ensure it contains a 'data' array.");
+        return;
+      }
+
       const res = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data }),
+        body: JSON.stringify(parsedData),
       });
 
       if (!res.ok) {
@@ -27,10 +34,7 @@ function App() {
       setResponse(result);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setResponse({
-        is_success: false,
-        message: "An error occurred. Please try again.",
-      });
+      setError("An error occurred. Please try again.");
     }
   };
 
@@ -60,12 +64,13 @@ function App() {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Enter comma-separated values"
+            placeholder='Enter JSON (e.g., {"data": ["A","C","z"]})'
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
           <button type="submit">Submit</button>
         </form>
+        {error && <p className="error-message">{error}</p>}
         {response && (
           <div>
             <h2>Filter Results:</h2>
@@ -87,3 +92,4 @@ function App() {
 }
 
 export default App;
+  
