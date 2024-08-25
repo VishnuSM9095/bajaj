@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-app.use(cors()); 
+app.use(cors());
 app.use(express.json());
 
 app.post('/bfhl', (req, res) => {
@@ -11,9 +11,9 @@ app.post('/bfhl', (req, res) => {
     if (!data || !Array.isArray(data)) {
         return res.status(400).json({
             is_success: false,
-            user_id: "vishnu9095",
-            email: "suganthivisnu666@gmail.com",
-            roll_number: "21BRS1379",
+            user_id: "john_doe_17091999",
+            email: "john@xyz.com",
+            roll_number: "ABCD123",
             message: 'Invalid input'
         });
     }
@@ -35,9 +35,9 @@ app.post('/bfhl', (req, res) => {
 
     res.json({
         is_success: true,
-        user_id: "vishnu", 
-        email: "suganthivisnu666@gmail.com",         
-        roll_number: "21BRS1379",       
+        user_id: "john_doe_17091999",
+        email: "john@xyz.com",
+        roll_number: "ABCD123",
         numbers,
         alphabets,
         highest_lowercase_alphabet: highestLowerCase ? [highestLowerCase] : []
