@@ -8,30 +8,18 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = inputValue.split(",").map(item => item.trim()); // Trim whitespace around items
+    const data = inputValue.split(",").map(item => item.trim()); // Ensure trimming of spaces
 
-    try {
-      const res = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data }),
-      });
+    const res = await fetch("https://bajaj-k35f.onrender.com/bfhl", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data }),
+    });
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const result = await res.json();
-      setResponse(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setResponse({
-        is_success: false,
-        message: "Error fetching data"
-      });
-    }
+    const result = await res.json();
+    setResponse(result);
   };
 
   const getFilteredResponse = () => {
